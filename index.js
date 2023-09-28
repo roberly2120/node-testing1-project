@@ -7,7 +7,11 @@
  * trimProperties({ name: '  jane  ' }) // returns a new object { name: 'jane' }
  */
 function trimProperties(obj) {
-  // ✨ implement
+  const newObj = {}
+  for (key in obj) {
+    newObj[key] = obj[key].trim()
+  }
+  return newObj
 }
 
 /**
@@ -19,7 +23,10 @@ function trimProperties(obj) {
  * trimPropertiesMutation({ name: '  jane  ' }) // returns the object mutated in place { name: 'jane' }
  */
 function trimPropertiesMutation(obj) {
-  // ✨ implement
+  for (key in obj) {
+    obj[key] = obj[key].trim()
+  }
+  return obj
 }
 
 /**
@@ -31,8 +38,17 @@ function trimPropertiesMutation(obj) {
  * findLargestInteger([{ integer: 1 }, { integer: 3 }, { integer: 2 }]) // returns 3
  */
 function findLargestInteger(integers) {
-  // ✨ implement
+  let largest = 0
+  for (let i = 0; i < integers.length; i++) {
+    for (key in integers[i]) {
+      if(integers[i][key] > largest) {
+        largest = integers[i][key]
+      }
+    }
+  }
+  return largest
 }
+
 
 class Counter {
   /**
@@ -40,7 +56,8 @@ class Counter {
    * @param {number} initialNumber - the initial state of the count
    */
   constructor(initialNumber) {
-    // ✨ initialize whatever properties are needed
+    this.currentCount = initialNumber
+    this.countDownFlag = false
   }
 
   /**
@@ -56,16 +73,25 @@ class Counter {
    * counter.countDown() // returns 0
    */
   countDown() {
-    // ✨ implement
+    if (this.countDownFlag === false) {
+      this.countDownFlag = true
+      return this.currentCount
+    } else if (this.currentCount > 0) {
+      this.currentCount--
+    } else {
+      this.currentCount = 0
+    }
+    return this.currentCount
   }
 }
+
 
 class Seasons {
   /**
    * [Exercise 5A] Seasons creates a seasons object
    */
   constructor() {
-    // ✨ initialize whatever properties are needed
+    this.season = null
   }
 
   /**
@@ -81,9 +107,25 @@ class Seasons {
    * seasons.next() // returns "summer"
    */
   next() {
-    // ✨ implement
+    if(this.season === null || this.season === 'spring') {
+      this.season = 'summer'
+      return this.season
+    }
+    if(this.season === 'summer') {
+      this.season = 'fall'
+      return this.season
+    }
+    if(this.season === 'fall') {
+      this.season = 'winter'
+      return this.season
+    }
+    if(this.season === 'winter') {
+      this.season = 'spring'
+      return this.season
+    }
   }
 }
+
 
 class Car {
   /**
@@ -93,9 +135,11 @@ class Car {
    * @param {number} mpg - miles the car can drive per gallon of gas
    */
   constructor(name, tankSize, mpg) {
+    this.name = name
     this.odometer = 0 // car initilizes with zero miles
     this.tank = tankSize // car initiazes full of gas
-    // ✨ initialize whatever other properties are needed
+    this.tankSize = tankSize
+    this.mpg = mpg
   }
 
   /**
@@ -112,9 +156,19 @@ class Car {
    * focus.drive(200) // returns 600 (ran out of gas after 100 miles)
    */
   drive(distance) {
-    // ✨ implement
+    if(distance / this.mpg < this.tank) {
+      const fuelUsed = distance / this.mpg
+      this.tank = this.tank - fuelUsed
+      this.odometer += distance
+      return this.odometer
+    } else {
+      const distanceLeft = this.tank * this.mpg
+      this.odometer += distanceLeft
+      this.tank = 0
+      return this.odometer
+    }
   }
-
+  
   /**
    * [Exercise 6C] Adds gallons to the tank
    * @param {number} gallons - the gallons of fuel we want to put in the tank
@@ -127,7 +181,16 @@ class Car {
    * focus.refuel(99) // returns 600 (tank only holds 20)
    */
   refuel(gallons) {
-    // ✨ implement
+    let distance 
+    if(this.tank + gallons <= this.tankSize) {
+      this.tank += gallons
+      distance = this.tank * this.mpg
+      return distance
+    } else {
+      this.tank = this.tankSize
+      distance = this.tank * this.mpg
+      return distance
+    }
   }
 }
 
@@ -144,9 +207,15 @@ class Car {
  *    // result is false
  * })
  */
-function isEvenNumberAsync(number) {
-  // ✨ implement
+async function isEvenNumberAsync(number) {
+  if(number % 2 === 0) {
+    return true
+  } else {
+    return false
+  }
 }
+isEvenNumberAsync(2)
+.then(res => console.log(res))
 
 module.exports = {
   trimProperties,
